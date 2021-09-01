@@ -1,0 +1,11 @@
+[functions]
+    node_bundler = "esbuild"
+    external_node_modules = [".prisma/client/index.d.ts", "nexus-plugin-prisma", "express", "@prisma/client", "nexus", "graphql"]
+[build]
+  command = "npx pnpm -w prebuild:netlify:shared && npx pnpm -w prebuild:netlify:backend && npx pnpm build"
+  functionsSource = 'src/lambda'
+  functions = "dist" #  netlify-lambda reads this
+  ignore = "if [ $CACHED_COMMIT_REF != $COMMIT_REF ]; then git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF . ../shared; fi"
+[build.environment]
+    NPM_FLAGS="--prefix=/dev/null"
+    NODE_VERSION='14'
